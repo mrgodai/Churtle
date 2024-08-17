@@ -347,7 +347,7 @@ W8Tab:AddToggle({
 TELTab:AddButton({
 	Name = "Backroom",
 	Callback = function(Value)
-		Teleport(-1)
+		Teleport(998)
 	  end
 })
 
