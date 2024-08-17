@@ -1,0 +1,324 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({
+    Name = "Akumi Scripts | Sword Simulator [BETA]",
+    HidePremium = false,
+    IntroText = "SECRETIVE AKUMI Scripts",
+    SaveConfig = true,
+    ConfigFolder = "OrionTest"
+})
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+-- Validate the game PlaceId before running the script
+local validPlaceIds = {
+    [16436007861] = true,
+    [17856546976] = true,
+    [17678973277] = true,
+    [17678973620] = true,
+    [17678973875] = true,
+    [17678974142] = true,
+    [17678974410] = true,
+    [17766697506] = true,
+    [18970398024] = true
+}
+
+if validPlaceIds[game.PlaceId] then
+
+    -- Values
+    getgenv().SwordSimulator = {
+        AutoDamage = false,
+        KillAura = false,
+        ClaimGift = false,
+        GetCodes = false,
+        MazeGem = false,
+        RaidGem = false,
+        W8L1 = false,
+        W8L249 = false,
+        W8L285 = false,
+        W8VIP = false
+    }
+
+    -- Functions
+    local function AutoDamage()
+        while getgenv().SwordSimulator.AutoDamage do
+            local success, err = pcall(function()
+                ReplicatedStorage.Remotes.Weapon.TakeDamage:FireServer()
+            end)
+            if not success then
+                print("Error in AutoDamage: ", err)
+            end
+            wait(0.001)
+        end
+    end
+
+    local function KillAura()
+        while getgenv().SwordSimulator.KillAura do
+            local success, err = pcall(function()
+                wait(15)
+                getgenv().G = true
+                getgenv().Creator = 'https://discord.gg/B3HqPPzFYr - HalloweenGaster'
+                while getgenv().G and getgenv().Creator == 'https://discord.gg/B3HqPPzFYr - HalloweenGaster' do
+                    wait(1)
+                    sethiddenproperty(Players.LocalPlayer, "SimulationRadius", 112412400000)
+                    sethiddenproperty(Players.LocalPlayer, "MaxSimulationRadius", 112412400000)
+                    for _, d in pairs(game.Workspace:GetDescendants()) do
+                        if d.ClassName == 'Humanoid' and d.Parent.Name ~= Players.LocalPlayer.Name then
+                            d.Health = 0
+                        end
+                    end
+                end
+            end)
+            if not success then
+                print("Error in KillAura: ", err)
+            end
+        end
+    end
+
+    local function ClaimGift()
+        while getgenv().SwordSimulator.ClaimGift do
+            local success, err = pcall(function()
+                for i = 1, 8 do
+                    ReplicatedStorage.Remotes.Common.Online.TryGetOnlineGift:InvokeServer(i)
+                    wait(3)
+                end
+            end)
+            if not success then
+                print("Error in ClaimGift: ", err)
+            end
+        end
+    end
+
+    local function GetCodes()
+        while getgenv().SwordSimulator.GetCodes do
+            local success, err = pcall(function()
+                ReplicatedStorage.Remotes.Common.Reward.CodeReward:FireServer("like400k")
+                wait(3)
+                ReplicatedStorage.Remotes.Common.Reward.CodeReward:FireServer("welcome")
+            end)
+            if not success then
+                print("Error in GetCodes: ", err)
+            end
+            wait(3)
+        end
+    end
+
+    local function MazeGem()
+        while getgenv().SwordSimulator.MazeGem do
+            local success, err = pcall(function()
+                ReplicatedStorage.Remotes.BackRoom.CollectChest:FireServer()
+            end)
+            if not success then
+                print("Error in MazeGem: ", err)
+            end
+            wait(2)
+        end
+    end
+
+    local function RaidGem()
+        while getgenv().SwordSimulator.RaidGem do
+            local success, err = pcall(function()
+                ReplicatedStorage.Remotes.Common.DailyShop.BuyItem:FireServer(2)
+            end)
+            if not success then
+                print("Error in RaidGem: ", err)
+            end
+            wait(0.5)
+        end
+    end
+
+    local function W8L1()
+        local success, err = pcall(function()
+            local args = {
+    			[1] = true,
+    			[2] = CFrame.new(-88.8159408569336, 1.7067937850952148, -1364.2713623046875, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+    			[3] = Vector3.new(-0.09488680213689804, 1.000000238418579, -1.997747778892517)
+		}
+            ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
+        end)
+        if not success then
+            print("Error in W8L1: ", err)
+        end
+        wait()
+    end
+
+    local function W8L249()
+        local success, err = pcall(function()
+            local args = {
+    			[1] = true,
+    			[2] = CFrame.new(-110.02083587646484, 1.6731200218200684, -1363.955322265625, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+   			[3] = Vector3.new(0.05283660069108009, 1, -1.9993019104003906)
+		}
+            ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
+        end)
+        if not success then
+            print("Error in W8L249: ", err)
+        end
+        wait()
+    end
+
+    local function W8L285()
+        local success, err = pcall(function()
+            local args = {
+    			[1] = true,
+    			[2] = CFrame.new(-131.0850372314453, 1.6731200218200684, -1361.33740234375, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+    			[3] = Vector3.new(0.008275382220745087, 1, -1.9999828338623047)
+		}
+            ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
+        end)
+        if not success then
+            print("Error in W8L285: ", err)
+        end
+        wait(0.3)
+    end
+
+    local function W8VIP()
+        local success, err = pcall(function()
+            local args = {
+    			[1] = true,
+    			[2] = CFrame.new(-89.9664535522461, 1.6731200218200684, -1302.98193359375, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+    			[3] = Vector3.new(-1.5865986347198486, 1, -1.2176635265350342)
+		}
+		ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
+        end)
+        if not success then
+            print("Error in W8VIP: ", err)
+        end
+        wait(0.3)
+    end
+
+    -- Toggles
+    local Tab = Window:MakeTab({
+        Name = "Farm",
+        Icon = "rbxassetid://15403180883",
+        PremiumOnly = false
+    })
+
+    local MiscTab = Window:MakeTab({
+        Name = "Miscellaneous",
+        Icon = "rbxassetid://15402939318",
+        PremiumOnly = false
+    })
+
+    local BRTab = Window:MakeTab({
+        Name = "Backrooms",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+    local W8Tab = Window:MakeTab({
+        Name = "World 8",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+    -- Tabs
+    Tab:AddToggle({
+        Name = "Auto Damage",
+        Default = false,
+        Callback = function(Value)
+            getgenv().SwordSimulator.AutoDamage = Value
+            if Value then AutoDamage() end
+        end
+    })
+
+    Tab:AddToggle({
+        Name = "Kill Aura",
+        Default = false,
+        Callback = function(Value)
+            getgenv().SwordSimulator.KillAura = Value
+            if Value then KillAura() end
+        end
+    })
+
+    MiscTab:AddToggle({
+        Name = "Claim Gifts",
+        Default = false,
+        Callback = function(Value)
+            getgenv().SwordSimulator.ClaimGift = Value
+            if Value then ClaimGift() end
+        end
+    })
+
+MiscTab:AddToggle({
+	Name = "Get Codes",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.GetCodes = Value 
+	  if Value then GetCodes() end
+end
+})
+
+BRTab:AddToggle({
+	Name = "Maze Gems(Back Rooms World)",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.MazeGem = Value 
+	  if Value then MazeGem() end
+end
+})
+
+BRTab:AddToggle({
+	Name = "Raid Gems(Back Rooms World)",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.RaidGem = Value 
+	  if Value then RaidGem() end
+end
+})
+
+W8Tab:AddToggle({
+	Name = "LEVEL 1 DUMMY XP FARM",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.W8L1 = Value 
+	  if Value then 
+		while Value do
+		 W8L1() 
+		end 
+	  end
+end
+})
+
+W8Tab:AddToggle({
+	Name = "LEVEL 249 DUMMY XP FARM",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.W8L249 = Value 
+	  if Value then 
+		while Value do
+		 W8L249() 
+		end 
+	  end
+end
+})
+
+W8Tab:AddToggle({
+	Name = "LEVEL 285 DUMMY XP FARM",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.W8L285 = Value 
+	  if Value then 
+		while Value do
+		 W8L285() 
+		end 
+	  end
+end
+})
+
+W8Tab:AddToggle({
+	Name = "VIP DUMMY XP FARM",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.W8VIP = Value 
+	  if Value then 
+		while Value do
+		 W8VIP() 
+		end 
+	  end
+end
+	  
+})
+
+end
+OrionLib:Init()
