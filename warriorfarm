@@ -130,61 +130,57 @@ if validPlaceIds[game.PlaceId] then
     local function W8L1()
         local success, err = pcall(function()
             local args = {
-    			[1] = true,
-    			[2] = CFrame.new(-88.8159408569336, 1.7067937850952148, -1364.2713623046875, 1, 0, 0, 0, 1, 0, 0, 0, 1),
-    			[3] = Vector3.new(-0.09488680213689804, 1.000000238418579, -1.997747778892517)
-		}
+   		[1] = true,
+    		[2] = Vector3.new(-87.6982650756836, 4.643090724945068, -1382.11083984375)
+	    }
             ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
         end)
         if not success then
             print("Error in W8L1: ", err)
         end
-        wait()
+        wait(0.6)
     end
 
     local function W8L249()
         local success, err = pcall(function()
             local args = {
     			[1] = true,
-    			[2] = CFrame.new(-110.02083587646484, 1.6731200218200684, -1363.955322265625, 1, 0, 0, 0, 1, 0, 0, 0, 1),
-   			[3] = Vector3.new(0.05283660069108009, 1, -1.9993019104003906)
+    			[2] = Vector3.new(-107.0389633178711, 4.4632182121276855, -1382.79638671875)
 		}
             ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
         end)
         if not success then
             print("Error in W8L249: ", err)
         end
-        wait()
+        wait(0.3)
     end
 
     local function W8L285()
         local success, err = pcall(function()
             local args = {
     			[1] = true,
-    			[2] = CFrame.new(-131.0850372314453, 1.6731200218200684, -1361.33740234375, 1, 0, 0, 0, 1, 0, 0, 0, 1),
-    			[3] = Vector3.new(0.008275382220745087, 1, -1.9999828338623047)
+    			[2] = Vector3.new(-129.45223999023438, 9.229759216308594, -1382.054931640625)
 		}
             ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
         end)
         if not success then
             print("Error in W8L285: ", err)
         end
-        wait(0.3)
+        wait(0.6)
     end
 
     local function W8VIP()
         local success, err = pcall(function()
             local args = {
     			[1] = true,
-    			[2] = CFrame.new(-89.9664535522461, 1.6731200218200684, -1302.98193359375, 1, 0, 0, 0, 1, 0, 0, 0, 1),
-    			[3] = Vector3.new(-1.5865986347198486, 1, -1.2176635265350342)
+    			[2] = Vector3.new(-106.70401000976562, 9.071269035339355, -1315.8131103515625)
 		}
 		ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
         end)
         if not success then
             print("Error in W8VIP: ", err)
         end
-        wait(0.3)
+        wait(0.6)
     end
 
     -- Toggles
@@ -273,7 +269,7 @@ W8Tab:AddToggle({
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L1 = Value 
 	  if Value then 
-		while Value do
+		while getgenv().SwordSimulator.W8L1 do
 		 W8L1() 
 		end 
 	  end
@@ -286,7 +282,7 @@ W8Tab:AddToggle({
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L249 = Value 
 	  if Value then 
-		while Value do
+		while getgenv().SwordSimulator.W8L249 do
 		 W8L249() 
 		end 
 	  end
@@ -299,7 +295,7 @@ W8Tab:AddToggle({
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L285 = Value 
 	  if Value then 
-		while Value do
+		while getgenv().SwordSimulator.W8L285 do
 		 W8L285() 
 		end 
 	  end
@@ -307,18 +303,18 @@ end
 })
 
 W8Tab:AddToggle({
-	Name = "VIP DUMMY XP FARM",
-	Default = false,
-	Callback = function(Value)
-	  getgenv().SwordSimulator.W8VIP = Value 
-	  if Value then 
-		while Value do
-		 W8VIP() 
-		end 
-	  end
-end
-	  
+    Name = "VIP DUMMY XP FARM",
+    Default = false,
+    Callback = function(Value)
+        getgenv().SwordSimulator.W8VIP = Value 
+        if Value then 
+            while getgenv().SwordSimulator.W8VIP do
+                W8VIP() 
+            end
+        end
+    end
 })
+
 
 end
 OrionLib:Init()
