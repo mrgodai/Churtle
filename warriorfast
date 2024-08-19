@@ -1,8 +1,8 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({
-    Name = "Akumi Scripts | Sword Simulator [BETA]",
+    Name = "Akumi",
     HidePremium = false,
-    IntroText = "SECRETIVE AKUMI Scripts",
+    IntroText = "",
     SaveConfig = true,
     ConfigFolder = "OrionTest"
 })
