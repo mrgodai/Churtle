@@ -297,7 +297,7 @@ W8Tab:AddToggle({
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L1 = Value 
 	  if Value then 
-		while getgenv().SwordSimulator.W8L1 do
+		while true do
 		 W8L1() 
 		end 
 	  end
@@ -310,7 +310,7 @@ W8Tab:AddToggle({
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L249 = Value 
 	  if Value then 
-		while getgenv().SwordSimulator.W8L249 do
+		while true do
 		 W8L249() 
 		end 
 	  end
