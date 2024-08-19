@@ -43,7 +43,12 @@ if validPlaceIds[game.PlaceId] then
     local function AutoDamage()
         while getgenv().SwordSimulator.AutoDamage do
             local success, err = pcall(function()
-                ReplicatedStorage.Remotes.Weapon.TakeDamage:FireServer()
+                --ReplicatedStorage.Remotes.Weapon.TakeDamage:FireServer()
+		local player = game.Players.LocalPlayer
+		local character = player.Character
+		local ServerBehaviour = game:GetService("ReplicatedStorage").Remotes.Skill.ServerBehaviour
+    		local characterPosition = character.HumanoidRootPart.Position
+    		ServerBehaviour:FireServer(false, characterPosition)
             end)
             if not success then
                 print("Error in AutoDamage: ", err)
@@ -138,7 +143,7 @@ if validPlaceIds[game.PlaceId] then
         if not success then
             print("Error in W8L1: ", err)
         end
-        wait()
+        wait(0.7)
     end
 
     local function W8L249()
@@ -152,7 +157,7 @@ if validPlaceIds[game.PlaceId] then
         if not success then
             print("Error in W8L249: ", err)
         end
-        wait()
+        wait(0.7)
     end
 
     local function W8L285()
@@ -166,7 +171,7 @@ if validPlaceIds[game.PlaceId] then
         if not success then
             print("Error in W8L285: ", err)
         end
-        wait()
+        wait(0.7)
     end
 
     local function W8VIP()
@@ -180,7 +185,7 @@ if validPlaceIds[game.PlaceId] then
         if not success then
             print("Error in W8VIP: ", err)
         end
-        wait()
+        wait(0.7)
     end
 
     local function Teleport(world)
@@ -265,8 +270,9 @@ BRTab:AddButton({
     		[1] = true
 		}
 	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Obby"):WaitForChild("ChangePlayerObbying"):FireServer(unpack(args))
+        wait(1)
 	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Obby"):WaitForChild("GetObbyData"):InvokeServer()
-	wait(3)
+	wait(1)
 	position = Vector3.new(-88.28643798828125, 103.42346954345703, -2862.521240234375)
 	local character = game.Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 	character:SetPrimaryPartCFrame(CFrame.new(position))
@@ -323,7 +329,7 @@ W8Tab:AddToggle({
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L285 = Value 
 	  if Value then 
-		while getgenv().SwordSimulator.W8L285 do
+		while true do
 		 W8L285() 
 		end 
 	  end
@@ -336,7 +342,7 @@ W8Tab:AddToggle({
     Callback = function(Value)
         getgenv().SwordSimulator.W8VIP = Value 
         if Value then 
-            while getgenv().SwordSimulator.W8VIP do
+            while true do
                 W8VIP() 
             end
         end
@@ -347,7 +353,7 @@ W8Tab:AddToggle({
 TELTab:AddButton({
 	Name = "Backroom",
 	Callback = function(Value)
-		Teleport(998)
+		Teleport(-1)
 	  end
 })
 
