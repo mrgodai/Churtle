@@ -41,7 +41,6 @@ if validPlaceIds[game.PlaceId] then
 
     -- Functions
     local function AutoDamage()
-        while getgenv().SwordSimulator.AutoDamage do
             local success, err = pcall(function()
                 --ReplicatedStorage.Remotes.Weapon.TakeDamage:FireServer()
 		local player = game.Players.LocalPlayer
@@ -53,8 +52,7 @@ if validPlaceIds[game.PlaceId] then
             if not success then
                 print("Error in AutoDamage: ", err)
             end
-            wait(0.001)
-        end
+            wait()
     end
 
     local function KillAura()
@@ -231,8 +229,12 @@ if validPlaceIds[game.PlaceId] then
         Name = "Auto Damage",
         Default = false,
         Callback = function(Value)
-            getgenv().SwordSimulator.AutoDamage = Value
-            if Value then AutoDamage() end
+        getgenv().SwordSimulator.AutoDamage = Value
+	if Value then 
+		while getgenv().SwordSimulator.AutoDamage do
+		  AutoDamage()
+		end 
+	  end
         end
     })
 
@@ -241,7 +243,11 @@ if validPlaceIds[game.PlaceId] then
         Default = false,
         Callback = function(Value)
             getgenv().SwordSimulator.KillAura = Value
-            if Value then KillAura() end
+            if Value then 
+		while getgenv().SwordSimulator.KillAura do
+		  KillAura()
+		end 
+	  end
         end
     })
 
