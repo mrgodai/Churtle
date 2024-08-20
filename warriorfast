@@ -56,13 +56,8 @@ if validPlaceIds[game.PlaceId] then
     end
 
     local function KillAura()
-        while getgenv().SwordSimulator.KillAura do
             local success, err = pcall(function()
-                wait(15)
-                getgenv().G = true
-                getgenv().Creator = 'https://discord.gg/B3HqPPzFYr - HalloweenGaster'
-                while getgenv().G and getgenv().Creator == 'https://discord.gg/B3HqPPzFYr - HalloweenGaster' do
-                    wait(1)
+                wait(1)
                     sethiddenproperty(Players.LocalPlayer, "SimulationRadius", 112412400000)
                     sethiddenproperty(Players.LocalPlayer, "MaxSimulationRadius", 112412400000)
                     for _, d in pairs(game.Workspace:GetDescendants()) do
@@ -70,12 +65,10 @@ if validPlaceIds[game.PlaceId] then
                             d.Health = 0
                         end
                     end
-                end
             end)
             if not success then
                 print("Error in KillAura: ", err)
             end
-        end
     end
 
     local function ClaimGift()
