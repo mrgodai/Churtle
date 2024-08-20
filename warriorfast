@@ -200,7 +200,7 @@ if validPlaceIds[game.PlaceId] then
     })
 
     local BRTab = Window:MakeTab({
-        Name = "BR/OBBY(W4)",
+        Name = "GEMS",
         Icon = "rbxassetid://4483345998",
         PremiumOnly = false
     })
