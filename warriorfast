@@ -23,7 +23,7 @@ local validPlaceIds = {
     [18970398024] = true
 }
 
-if validPlaceIds[game.PlaceId] then
+if true then
 
     -- Values
     getgenv().SwordSimulator = {
