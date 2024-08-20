@@ -40,7 +40,20 @@ if validPlaceIds[game.PlaceId] then
     }
 
     -- Functions
-    local function AutoDamage()
+
+   local function AutoDamage()
+        while getgenv().SwordSimulator.AutoDamage do
+            local success, err = pcall(function()
+                ReplicatedStorage.Remotes.Weapon.TakeDamage:FireServer()
+            end)
+            if not success then
+                print("Error in AutoDamage: ", err)
+            end
+            wait(0.001)
+        end
+    end
+
+    local function AutoSkillDamage()
             local success, err = pcall(function()
                 --ReplicatedStorage.Remotes.Weapon.TakeDamage:FireServer()
 		local player = game.Players.LocalPlayer
@@ -50,7 +63,7 @@ if validPlaceIds[game.PlaceId] then
     		ServerBehaviour:FireServer(false, characterPosition)
             end)
             if not success then
-                print("Error in AutoDamage: ", err)
+                print("Error in AutoSkillDamage: ", err)
             end
             wait()
     end
@@ -226,6 +239,19 @@ if validPlaceIds[game.PlaceId] then
 	if Value then 
 		while getgenv().SwordSimulator.AutoDamage do
 		  AutoDamage()
+		end 
+	  end
+        end
+    })
+
+    Tab:AddToggle({
+        Name = "Auto Skill Damage",
+        Default = false,
+        Callback = function(Value)
+        getgenv().SwordSimulator.AutoDamage = Value
+	if Value then 
+		while getgenv().SwordSimulator.AutoDamage do
+		  AutoSkillDamage()
 		end 
 	  end
         end
