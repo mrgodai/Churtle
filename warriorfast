@@ -291,18 +291,12 @@ end
 })
 
 MiscTab:AddToggle({
-	Name = "3D OFF",
+	Name = "NO 3D",
 	Default = false,
 	Callback = function(Value)
 	  getgenv().SwordSimulator.GetCodes = Value 
 	  if Value then 
 		game:GetService("RunService"):Set3dRenderingEnabled(false)
-		while true then
-			game:GetService("RunService"):Set3dRenderingEnabled(true)
-			wait(1)
-			game:GetService("RunService"):Set3dRenderingEnabled(false)
-			wait(300)
-		end
 	  else
 		game:GetService("RunService"):Set3dRenderingEnabled(true)
 	end
