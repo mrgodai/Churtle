@@ -290,6 +290,19 @@ MiscTab:AddToggle({
 end
 })
 
+MiscTab:AddToggle({
+	Name = "NO 3D",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.GetCodes = Value 
+	  if Value then 
+		game:GetService("RunService"):Set3dRenderingEnabled(false)
+	  else
+		game:GetService("RunService"):Set3dRenderingEnabled(true)
+	end
+end
+})
+
 BRTab:AddButton({
 	Name = "Obby Teleport",
 	Callback = function()
