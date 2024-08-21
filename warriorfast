@@ -297,7 +297,7 @@ MiscTab:AddToggle({
 	  getgenv().SwordSimulator.GetCodes = Value 
 	  if Value then 
 		game:GetService("RunService"):Set3dRenderingEnabled(false)
-		while true
+		while true then
 			game:GetService("RunService"):Set3dRenderingEnabled(true)
 			wait(1)
 			game:GetService("RunService"):Set3dRenderingEnabled(false)
