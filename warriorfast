@@ -25,6 +25,7 @@ local validPlaceIds = {
 
 if true then
 
+
     -- Values
     getgenv().SwordSimulator = {
         AutoDamage = false,
@@ -65,7 +66,7 @@ if true then
             if not success then
                 print("Error in AutoSkillDamage: ", err)
             end
-            wait()
+            wait(0.03)
     end
 
     local function KillAura()
@@ -89,7 +90,8 @@ if true then
             local success, err = pcall(function()
                 for i = 1, 8 do
                     ReplicatedStorage.Remotes.Common.Online.TryGetOnlineGift:InvokeServer(i)
-                    wait(3)
+                    ReplicatedStorage.Remotes.Common.Market.GetFreeGem:InvokeServer()
+                    wait(60)
                 end
             end)
             if not success then
@@ -299,7 +301,7 @@ BRTab:AddButton({
 	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Obby"):WaitForChild("GetObbyData"):InvokeServer()
 	wait(1)
 	position = Vector3.new(-88.28643798828125, 103.42346954345703, -2862.521240234375)
-	local character = game.Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+	local character = game.Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:wait(0.03)
 	character:SetPrimaryPartCFrame(CFrame.new(position))
   	end    
 })
