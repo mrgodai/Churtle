@@ -100,6 +100,18 @@ if true then
         end
     end
 
+    local function ClaimShopGems()
+        while getgenv().SwordSimulator.ClaimGift do
+            local success, err = pcall(function()
+		ReplicatedStorage.Remotes.Common.Market.GetFreeGem:InvokeServer()
+		wait(60)
+            end)
+            if not success then
+                print("Error in ClaimGift: ", err)
+            end
+        end
+    end
+
     local function GetCodes()
         while getgenv().SwordSimulator.GetCodes do
             local success, err = pcall(function()
@@ -348,6 +360,19 @@ BRTab:AddToggle({
 	  if Value then RaidGem() end
 end
 })
+
+BRTab:AddToggle({
+        Name = "Claim Shop Free Gems",
+        Default = false,
+        Callback = function(Value)
+            getgenv().SwordSimulator.ClaimGift = Value
+            if Value then 
+		while getgenv().SwordSimulator.ClaimGift do
+			ClaimShopGems()
+		end
+	    end
+        end
+    })
 
 W8Tab:AddToggle({
 	Name = "LEVEL 1 DUMMY XP FARM",
