@@ -50,7 +50,7 @@ if true then
             if not success then
                 print("Error in AutoDamage: ", err)
             end
-            wait(0.001)
+            wait(0.03)
         end
     end
 
@@ -66,7 +66,7 @@ if true then
             if not success then
                 print("Error in AutoSkillDamage: ", err)
             end
-            wait(0.03)
+	wait(0.03)
     end
 
     local function KillAura()
@@ -215,6 +215,8 @@ if true then
     	ReplicatedStorage.Remotes.Common.Door.Teleport:FireServer(unpack(args))
 	end
 
+local killcount = 0
+
     -- Toggles
     local Tab = Window:MakeTab({
         Name = "Farm",
@@ -266,9 +268,15 @@ if true then
         Callback = function(Value)
         getgenv().SwordSimulator.AutoDamage = Value
 	if Value then 
-		while getgenv().SwordSimulator.AutoDamage do
-		  AutoSkillDamage()
-		end 
+	while getgenv().SwordSimulator.AutoDamage do
+		if killcount < 200000 then
+            		killcount = killcount + 1
+			 AutoSkillDamage()
+		else
+	   		 wait(100)
+	   		 killcount = 0 
+		end
+	end 
 	  end
         end
     })
