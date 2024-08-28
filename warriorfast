@@ -105,8 +105,9 @@ if true then
         while getgenv().SwordSimulator.ClaimGift do
             local success, err = pcall(function()
 		ReplicatedStorage.Remotes.Common.Market.GetFreeGem:InvokeServer()
+		wait(30)
 		game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Spin"):WaitForChild("TrySpin"):InvokeServer()
-		wait(60)
+		wait(30)
             end)
             if not success then
                 print("Error in ClaimGift: ", err)
@@ -215,8 +216,6 @@ if true then
     	ReplicatedStorage.Remotes.Common.Door.Teleport:FireServer(unpack(args))
 	end
 
-local killcount = 0
-
     -- Toggles
     local Tab = Window:MakeTab({
         Name = "Farm",
@@ -269,12 +268,7 @@ local killcount = 0
         getgenv().SwordSimulator.AutoDamage = Value
 	if Value then 
 	while getgenv().SwordSimulator.AutoDamage do
-		if killcount < 200000 then
-            		killcount = killcount + 1
 			 AutoSkillDamage()
-		else
-	   		 wait(100)
-	   		 killcount = 0 
 		end
 	end 
 	  end
