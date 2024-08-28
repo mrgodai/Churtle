@@ -267,11 +267,10 @@ if true then
         Callback = function(Value)
         getgenv().SwordSimulator.AutoDamage = Value
 	if Value then 
-	while getgenv().SwordSimulator.AutoDamage do
+		while getgenv().SwordSimulator.AutoDamage do
 			 AutoSkillDamage()
 		end
 	end 
-	  end
         end
     })
 
@@ -283,8 +282,8 @@ if true then
             if Value then 
 		while getgenv().SwordSimulator.KillAura do
 		  KillAura()
-		end 
-	  end
+		end
+	end
         end
     })
 
