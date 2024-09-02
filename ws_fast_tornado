@@ -32,6 +32,7 @@ if true then
         KillAura = false,
         ClaimGift = false,
 	ClaimGem = false,
+	ClaimShopGems = false,
         GetCodes = false,
         MazeGem = false,
         RaidGem = false,
@@ -115,13 +116,13 @@ local function ClaimSeason()
                 end
             end)
             if not success then
-                print("Error in ClaimGift: ", err)
+                print("Error in ClaimSeason: ", err)
             end
     end
 
 
     local function ClaimShopGems()
-        while getgenv().SwordSimulator.ClaimGift do
+        while getgenv().SwordSimulator.ClaimShopGems do
             local success, err = pcall(function()
 		ReplicatedStorage.Remotes.Common.Market.GetFreeGem:InvokeServer()
 		wait(30)
@@ -560,13 +561,13 @@ GEMTab:AddToggle({
 end
 })
 
-GEMTab:AddToggle({
+BRTab:AddToggle({
         Name = "Claim Shop Free Gems",
         Default = false,
         Callback = function(Value)
-            getgenv().SwordSimulator.ClaimGem = Value
+            getgenv().SwordSimulator.ClaimShopGems = Value
             if Value then 
-		while getgenv().SwordSimulator.ClaimGem do
+		while getgenv().SwordSimulator.ClaimShopGems do
 			ClaimShopGems()
 		end
 	    end
