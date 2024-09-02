@@ -561,7 +561,7 @@ GEMTab:AddToggle({
 end
 })
 
-BRTab:AddToggle({
+GEMTab:AddToggle({
         Name = "Claim Shop Free Gems",
         Default = false,
         Callback = function(Value)
