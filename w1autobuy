@@ -33,11 +33,11 @@ local function checkPlaceId()
 		wait(0.1)
             end
 	    --game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Skill"):WaitForChild("Extract"):InvokeServer(10)
-	    wait(5)
+	    wait(3)
             teleport(0)
 	    wait(10)
         else
-	    wait(5)
+	    wait(3)
             teleport(1)
 	    wait(10)
         end
