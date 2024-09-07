@@ -1,4 +1,3 @@
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local function buyW1Potions(x)
@@ -46,6 +45,7 @@ local function checkPlaceId()
 	    wait(4)
             teleport(1)
 	    wait(20)
+	end
     end
 end
 
