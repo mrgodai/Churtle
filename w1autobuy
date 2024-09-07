@@ -1,8 +1,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Function to buy an item
-local function buyItem(x)
+local function buyW1Potions(x)
     local args = {
         [1] = x
     }
@@ -10,38 +9,12 @@ local function buyItem(x)
     ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("DailyShop"):WaitForChild("BuyItem"):FireServer(unpack(args))
 end
 
--- Function to handle teleportation
 local function teleport(world)
-    local args = {
-        [1] = world
-    }
-    
-    ReplicatedStorage.Remotes.Common.Door.Teleport:FireServer(unpack(args))
-end
+	local ts = game:GetService("TeleportService")
 
--- Function to continuously check PlaceId and perform actions
-local function checkPlaceId()
-    while true do
-        if game.PlaceId == 16436007861 then
-            local values = {4, 5, 6, 7}
-            for _, x in ipairs(values) do
-                buyItem(x)
-		wait(0.1)
-                buyItem(x)
-		wait(0.1)
-                buyItem(x)
-		wait(0.1)
-            end
-	    --game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Skill"):WaitForChild("Extract"):InvokeServer(10)
-	    wait(3)
-            teleport(0)
-	    wait(10)
-        else
-	    wait(3)
-            teleport(1)
-	    wait(10)
-        end
-    end
+	local p = game:GetService("Players").LocalPlayer
+
+	ts:Teleport(game.PlaceId, p)
 end
 
 -- Function to continuously handle code rewards
@@ -56,8 +29,25 @@ local function handleCodeRewards()
     end
 end
 
--- Start coroutines
-game:GetService("RunService"):Set3dRenderingEnabled(false)
---coroutine.wrap(handleCodeRewards)()
-coroutine.wrap(checkPlaceId)()
+-- Function to continuously check PlaceId and perform actions
+local function checkPlaceId()
+    while true do
+        if game.PlaceId == 16436007861 then
+            local values = {4, 5, 6, 7}
+            for _, x in ipairs(values) do
+                buyW1Potions(x)
+		wait(0.1)
+                buyW1Potions(x)
+		wait(0.1)
+                buyW1Potions(x)
+		wait(0.1)
+            end
+	    --game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Skill"):WaitForChild("Extract"):InvokeServer(10)
+	    wait(4)
+            teleport(1)
+	    wait(20)
+    end
+end
 
+
+coroutine.wrap(checkPlaceId)()
