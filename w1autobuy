@@ -1,5 +1,3 @@
-
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local function buyW1Potions(x)
@@ -21,12 +19,12 @@ end
 -- Function to continuously handle code rewards
 local function handleCodeRewards()
     while true do
-        local args = {
-            [1] = "0.5mlike"
-        }
-        
-        ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Reward"):WaitForChild("CodeReward"):FireServer(unpack(args))
-        wait(0.1)  -- Adjust the wait time as needed
+local args = {
+    [1] = "0.5mlike"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Reward"):WaitForChild("CodeReward"):FireServer(unpack(args))
+        wait(4)  -- Adjust the wait time as needed
     end
 end
 
@@ -52,4 +50,5 @@ local function checkPlaceId()
 end
 
 game:GetService("RunService"):Set3dRenderingEnabled(false)
+coroutine.wrap(handleCodeRewards)()
 coroutine.wrap(checkPlaceId)()
