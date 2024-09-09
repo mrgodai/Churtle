@@ -90,9 +90,7 @@ if true then
             local success, err = pcall(function()
                 for i = 1, 8 do
                     ReplicatedStorage.Remotes.Common.Online.TryGetOnlineGift:InvokeServer(i)
-		    wait(30)
-                    ReplicatedStorage.Remotes.Common.Market.GetFreeGem:InvokeServer()
-                    wait(30)
+		    wait(1)
                 end
             end)
             if not success then
