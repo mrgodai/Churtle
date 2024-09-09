@@ -459,9 +459,9 @@ TELTab:AddButton({
 })
 
 TELTab:AddButton({
-	Name = "World 8",
+	Name = "World 9",
 	Callback = function(Value)
-		Teleport(8)
+		Teleport(9)
 	  end
 })
 
