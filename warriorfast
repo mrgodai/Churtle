@@ -162,7 +162,7 @@ if true then
         if not success then
             print("Error in W8L1: ", err)
         end
-        wait(0.7)
+        wait(0.1)
     end
 
     local function W8L249()
@@ -176,7 +176,7 @@ if true then
         if not success then
             print("Error in W8L249: ", err)
         end
-        wait(0.7)
+        wait(0.1)
     end
 
     local function W8L285()
@@ -190,7 +190,7 @@ if true then
         if not success then
             print("Error in W8L285: ", err)
         end
-        wait(0.7)
+        wait(0.1)
     end
 
     local function W8VIP()
@@ -204,7 +204,65 @@ if true then
         if not success then
             print("Error in W8VIP: ", err)
         end
-        wait(0.7)
+        wait(0.1)
+    end
+
+
+
+    local function W9L1()
+        local success, err = pcall(function()
+            local args = {
+    			[1] = true,
+    			[2] = Vector3.new(-88.2409896850586, 4.664284706115723, -1380.907958984375)
+	    }
+            ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
+        end)
+        if not success then
+            print("Error in W9L1: ", err)
+        end
+        wait(0.1)
+    end
+
+    local function W9L2()
+        local success, err = pcall(function()
+            local args = {
+    			[1] = true,
+    			[2] = Vector3.new(-108.7099609375, 4.662771224975586, -1380.481201171875)
+		}
+            ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
+        end)
+        if not success then
+            print("Error in W9L249: ", err)
+        end
+        wait(0.1)
+    end
+
+    local function W9L3()
+        local success, err = pcall(function()
+            local args = {
+    			[1] = true,
+    			[2] = Vector3.new(-129.69189453125, 6.825016975402832, -1383.013916015625)
+		}
+            ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
+        end)
+        if not success then
+            print("Error in W9L285: ", err)
+        end
+        wait(0.1)
+    end
+
+    local function W9VIP()
+        local success, err = pcall(function()
+            local args = {
+    			[1] = true,
+    			[2] = Vector3.new(-107.29464721679688, 4.660392761230469, -1312.467529296875)
+		}
+		ReplicatedStorage.Remotes.Skill.ServerBehaviour:FireServer(unpack(args))
+        end)
+        if not success then
+            print("Error in W9VIP: ", err)
+        end
+        wait(0.1)
     end
 
     local function Teleport(world)
@@ -376,7 +434,7 @@ BRTab:AddToggle({
     })
 
 W8Tab:AddToggle({
-	Name = "LEVEL 1 DUMMY XP FARM",
+	Name = "L1 DUMMY XP FARM",
 	Default = false,
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L1 = Value 
@@ -389,7 +447,7 @@ end
 })
 
 W8Tab:AddToggle({
-	Name = "LEVEL 249 DUMMY XP FARM",
+	Name = "L249 DUMMY XP FARM",
 	Default = false,
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L249 = Value 
@@ -402,7 +460,7 @@ end
 })
 
 W8Tab:AddToggle({
-	Name = "LEVEL 285 DUMMY XP FARM",
+	Name = "L285 DUMMY XP FARM",
 	Default = false,
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W8L285 = Value 
@@ -427,6 +485,57 @@ W8Tab:AddToggle({
     end
 })
 
+W9Tab:AddToggle({
+	Name = "L1 DUMMY XP FARM",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.W9L1 = Value 
+	  if Value then 
+		while true do
+		 W9L1() 
+		end 
+	  end
+end
+})
+
+W9Tab:AddToggle({
+	Name = "L249 DUMMY XP FARM",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.W9L2 = Value 
+	  if Value then 
+		while true do
+		 W9L2() 
+		end 
+	  end
+end
+})
+
+W9Tab:AddToggle({
+	Name = "L285 DUMMY XP FARM",
+	Default = false,
+	Callback = function(Value)
+	  getgenv().SwordSimulator.W9L3 = Value 
+	  if Value then 
+		while true do
+		 W9L3() 
+		end 
+	  end
+end
+})
+
+W9Tab:AddToggle({
+    Name = "VIP DUMMY XP FARM",
+    Default = false,
+    Callback = function(Value)
+        getgenv().SwordSimulator.W9VIP = Value 
+        if Value then 
+            while true do
+                W9VIP() 
+            end
+        end
+    end
+})
 
 TELTab:AddButton({
 	Name = "Backroom",
