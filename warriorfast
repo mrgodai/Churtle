@@ -505,7 +505,7 @@ end
 })
 
 W9Tab:AddToggle({
-	Name = "L249 DUMMY XP FARM",
+	Name = "L320 DUMMY XP FARM",
 	Default = false,
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W9L2 = Value 
@@ -518,7 +518,7 @@ end
 })
 
 W9Tab:AddToggle({
-	Name = "L285 DUMMY XP FARM",
+	Name = "L345 DUMMY XP FARM",
 	Default = false,
 	Callback = function(Value)
 	  getgenv().SwordSimulator.W9L3 = Value 
