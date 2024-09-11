@@ -297,6 +297,12 @@ if true then
         PremiumOnly = false
     })
 
+    local W9Tab = Window:MakeTab({
+        Name = "World 9",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
     local TELTab = Window:MakeTab({
         Name = "Teleport",
         Icon = "rbxassetid://4483345998",
