@@ -135,7 +135,7 @@ if true then
             if not success then
                 print("Error in MazeGem: ", err)
             end
-            wait(2)
+            wait(1)
         end
     end
 
@@ -147,7 +147,7 @@ if true then
             if not success then
                 print("Error in RaidGem: ", err)
             end
-            wait(0.5)
+            wait(0.1)
         end
     end
 
