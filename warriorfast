@@ -142,7 +142,11 @@ if true then
     local function RaidGem()
         while getgenv().SwordSimulator.RaidGem do
             local success, err = pcall(function()
-                ReplicatedStorage.Remotes.Common.DailyShop.BuyItem:FireServer(1)
+local args = {
+    [1] = 1
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("DailyShop"):WaitForChild("BuyItem"):FireServer(unpack(args))
             end)
             if not success then
                 print("Error in RaidGem: ", err)
