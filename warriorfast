@@ -90,7 +90,7 @@ if true then
             local success, err = pcall(function()
                 for i = 1, 8 do
                     ReplicatedStorage.Remotes.Common.Online.TryGetOnlineGift:InvokeServer(i)
-		    wait(1)
+		    wait(0.1)
                 end
             end)
             if not success then
@@ -151,7 +151,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Commo
             if not success then
                 print("Error in RaidGem: ", err)
             end
-            wait(0.1)
+            wait(0.05)
         end
     end
 
