@@ -1,3 +1,6 @@
+
+
+
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({
     Name = "",
@@ -29,6 +32,8 @@ if true then
     -- Values
     getgenv().SwordSimulator = {
         AutoDamage = false,
+        AutoSkillDamage = false,
+        AutoSpooderman = false,
         KillAura = false,
         ClaimGift = false,
         GetCodes = false,
@@ -68,6 +73,45 @@ if true then
             end
 	wait(0.03)
     end
+
+
+    local function AutoSpooderman()
+            local success, err = pcall(function()
+                local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Fetch the player's current HumanoidRootPart position
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Get the current CFrame of the player and calculate the offset (2 feet in front of the player)
+local currentCFrame = humanoidRootPart.CFrame
+local offset = 2 -- Offset by 2 studs (equivalent to 2 feet)
+local offsetCFrame = currentCFrame * CFrame.new(0, 0, -offset)
+
+local args = {
+    [1] = 3027
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"):WaitForChild("Dependencies"):WaitForChild("SkillEnterCommand"):FireServer(unpack(args))
+
+-- Update args with the new CFrame
+local args = { 
+    [1] = 3027,
+    [2] = {
+        ["cframe"] = offsetCFrame
+    }
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"):WaitForChild("Dependencies"):WaitForChild("SearchBehaviourCommand"):FireServer(unpack(args))
+
+            end)
+            if not success then
+                print("Error in AutoSkillDamage: ", err)
+            end
+	wait(0.2)
+    end
+
+
 
     local function KillAura()
             local success, err = pcall(function()
@@ -331,10 +375,23 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Commo
         Name = "Auto Skill Damage",
         Default = false,
         Callback = function(Value)
-        getgenv().SwordSimulator.AutoDamage = Value
+        getgenv().SwordSimulator.AutoSkillDamage = Value
 	if Value then 
-		while getgenv().SwordSimulator.AutoDamage do
+		while getgenv().SwordSimulator.AutoSkillDamage do
 			 AutoSkillDamage()
+		end
+	end 
+        end
+    })
+
+    Tab:AddToggle({
+        Name = "Auto Spooder-man",
+        Default = false,
+        Callback = function(Value)
+        getgenv().SwordSimulator.AutoSpooderman = Value
+	if Value then 
+		while getgenv().SwordSimulator.AutoSpooderman do
+			 AutoSpooderman()
 		end
 	end 
         end
