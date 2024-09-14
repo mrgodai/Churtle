@@ -143,7 +143,7 @@ if true then
         while getgenv().SwordSimulator.RaidGem do
             local success, err = pcall(function()
 local args = {
-    [1] = 1
+    [1] = 2
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("DailyShop"):WaitForChild("BuyItem"):FireServer(unpack(args))
