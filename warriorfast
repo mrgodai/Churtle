@@ -85,7 +85,7 @@ local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
 -- Get the current CFrame of the player and calculate the offset (2 feet in front of the player)
 local currentCFrame = humanoidRootPart.CFrame
-local offset = 2 -- Offset by 2 studs (equivalent to 2 feet)
+local offset = 12 -- Offset by 2 studs (equivalent to 2 feet)
 local offsetCFrame = currentCFrame * CFrame.new(0, 0, -offset)
 
 local args = {
