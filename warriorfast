@@ -85,7 +85,7 @@ local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
 -- Get the current CFrame of the player and calculate the offset (2 feet in front of the player)
 local currentCFrame = humanoidRootPart.CFrame
-local offset = 20 -- Offset by 2 studs (equivalent to 2 feet)
+local offset = 25 -- Offset by 2 studs (equivalent to 2 feet)
 local offsetCFrame = currentCFrame * CFrame.new(0, 0, -offset)
 
 local args = {
@@ -108,7 +108,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"
             if not success then
                 print("Error in AutoSkillDamage: ", err)
             end
-	wait(0.2)
+	wait(0.25)
     end
 
 
@@ -179,7 +179,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"
             if not success then
                 print("Error in MazeGem: ", err)
             end
-            wait(1)
+            wait(0.5)
         end
     end
 
@@ -195,7 +195,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Commo
             if not success then
                 print("Error in RaidGem: ", err)
             end
-            wait(0.05)
+            wait(0.1)
         end
     end
 
