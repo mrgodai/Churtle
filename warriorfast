@@ -36,7 +36,7 @@ if true then
         AutoSpooderman = false,
         KillAura = false,
         ClaimGift = false,
-        GetCodes = false,
+        ClaimSeasonPass = false,
         MazeGem = false,
         RaidGem = false,
         W8L1 = false,
@@ -78,31 +78,31 @@ if true then
     local function AutoSpooderman()
             local success, err = pcall(function()
                 local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
+	local character = player.Character or player.CharacterAdded:Wait()
 
--- Fetch the player's current HumanoidRootPart position
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+	-- Fetch the player's current HumanoidRootPart position
+	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
--- Get the current CFrame of the player and calculate the offset (2 feet in front of the player)
-local currentCFrame = humanoidRootPart.CFrame
-local offset = 25 -- Offset by 2 studs (equivalent to 2 feet)
-local offsetCFrame = currentCFrame * CFrame.new(0, 0, -offset)
+	-- Get the current CFrame of the player and calculate the offset (2 feet in front of the player)
+	local currentCFrame = humanoidRootPart.CFrame
+	local offset = 25 -- Offset by 2 studs (equivalent to 2 feet)
+	local offsetCFrame = currentCFrame * CFrame.new(0, 0, -offset)
 
-local args = {
-    [1] = 3027
-}
+	local args = {
+	    [1] = 3027
+	}
 
-game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"):WaitForChild("Dependencies"):WaitForChild("SkillEnterCommand"):FireServer(unpack(args))
+	game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"):WaitForChild("Dependencies"):WaitForChild("SkillEnterCommand"):FireServer(unpack(args))
 
--- Update args with the new CFrame
-local args = { 
-    [1] = 3027,
-    [2] = {
-        ["cframe"] = offsetCFrame
-    }
-}
+	-- Update args with the new CFrame
+	local args = { 
+    	[1] = 3027,
+    	[2] = {
+       	 ["cframe"] = offsetCFrame
+   	 }
+	}
 
-game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"):WaitForChild("Dependencies"):WaitForChild("SearchBehaviourCommand"):FireServer(unpack(args))
+	game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"):WaitForChild("Dependencies"):WaitForChild("SearchBehaviourCommand"):FireServer(unpack(args))
 
             end)
             if not success then
@@ -157,15 +157,21 @@ game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Skill"
         end
     end
 
-    local function GetCodes()
-        while getgenv().SwordSimulator.GetCodes do
+    local function ClaimSeasonPass()
+        while getgenv().SwordSimulator.ClaimSeasonPass do
             local success, err = pcall(function()
-                ReplicatedStorage.Remotes.Common.Reward.CodeReward:FireServer("like400k")
-                wait(3)
-                ReplicatedStorage.Remotes.Common.Reward.CodeReward:FireServer("welcome")
+                for i = 1, 20 do
+		local args = {
+    		[1] = "Free",
+    		[2] = i
+		}
+
+		game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Season"):WaitForChild("GetReward"):FireServer(unpack(args))
+		    wait(0.1)
+                end
             end)
             if not success then
-                print("Error in GetCodes: ", err)
+                print("Error in ClaimSeasonPass: ", err)
             end
             wait(3)
         end
@@ -420,11 +426,11 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Commo
     })
 
 MiscTab:AddToggle({
-	Name = "Get Codes",
+	Name = "Claim Season Pass",
 	Default = false,
 	Callback = function(Value)
-	  getgenv().SwordSimulator.GetCodes = Value 
-	  if Value then GetCodes() end
+	  getgenv().SwordSimulator.ClaimSeasonPass = Value 
+	  if Value then ClaimSeasonPass() end
 end
 })
 
@@ -432,7 +438,7 @@ MiscTab:AddToggle({
 	Name = "NO 3D",
 	Default = false,
 	Callback = function(Value)
-	  getgenv().SwordSimulator.GetCodes = Value 
+	  getgenv().SwordSimulator.ClaimSeasonPass = Value 
 	  if Value then 
 		game:GetService("RunService"):Set3dRenderingEnabled(false)
 		while true do
