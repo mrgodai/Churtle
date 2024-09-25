@@ -328,7 +328,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Commo
 
     -- Toggles
     local Tab = Window:MakeTab({
-        Name = "Farm",
+        Name = "Attacks",
         Icon = "rbxassetid://15403180883",
         PremiumOnly = false
     })
@@ -451,6 +451,19 @@ MiscTab:AddToggle({
 		game:GetService("RunService"):Set3dRenderingEnabled(true)
 	end
 end
+})
+
+MiscTab:AddSlider({
+	Name = "Walkspeed",
+	Min = 1,
+	Max = 200,
+	Default = 16,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Walkspeed",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end    
 })
 
 BRTab:AddButton({
