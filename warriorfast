@@ -453,17 +453,14 @@ MiscTab:AddToggle({
 end
 })
 
-MiscTab:AddSlider({
+
+MiscTab:AddTextbox({
 	Name = "Walkspeed",
-	Min = 1,
-	Max = 200,
 	Default = 16,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "Walkspeed",
+	TextDisappear = false,
 	Callback = function(Value)
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-	end    
+	end	  
 })
 
 BRTab:AddButton({
