@@ -4,11 +4,11 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "Plants Vs Brainrot SCRIPT 0.0.1v",
+   Name = " ",
    Icon = 0, 
-   LoadingTitle = "Mandarynka HUB",
-   LoadingSubtitle = "by MizuDEV 0.0.1v",
-   ShowText = "Rayfield",
+   LoadingTitle = " ",
+   LoadingSubtitle = " ",
+   ShowText = " ",
    Theme = "DarkBlue",
 
    ToggleUIKeybind = "G", 
@@ -18,12 +18,12 @@ local Window = Rayfield:CreateWindow({
 
    ConfigurationSaving = {
       Enabled = true,
-      FolderName = "Mandarynka HUB",
-      FileName = "Mandarynka HUB"
+      FolderName = "Chu",
+      FileName = "Chu"
    },
 
    Discord = {
-      Enabled = true, 
+      Enabled = false, 
       Invite = "dc.gg/mandarynkahub", 
       RememberJoins = true 
    },
@@ -42,122 +42,6 @@ local Window = Rayfield:CreateWindow({
 
 local MainTab = Window:CreateTab("🏠 Main", nil)
 
-local Label = MainTab:CreateLabel("⚠ Please use script on Private server if you are in private server you dont get ban ! ⚠", nil, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
-
-local Slider = MainTab:CreateSlider({
-   Name = "Walkspeed",
-   Range = {1, 200},
-   Increment = 1,
-   Suffix = "Speed",
-   CurrentValue = 32,
-   Flag = "Slider1",
-   Callback = function(Value)
-    game.Players.LocalPlayer.Character:WaitForChild("Humanoid").WalkSpeed = Value
-    Rayfield:Notify({
-   Title = "Succesly change value",
-   Content = "Succesly change speed to" .. Value,
-   Duration = 5,
-   Image = nil,
-})
-   end,
-})
-
-local Slider = MainTab:CreateSlider({
-   Name = "Jump Power",
-   Range = {1, 200},
-   Increment = 1,
-   Suffix = "Jump Power",
-   CurrentValue = 50,
-   Flag = "Slider2",
-   Callback = function(Value)
-    game.Players.LocalPlayer.Character:WaitForChild("Humanoid").JumpPower = Value
-        Rayfield:Notify({
-   Title = "Succesly change value",
-   Content = "Succesly change jump power to" .. Value,
-   Duration = 5,
-   Image = nil,
-})
-   end,
-})
-
-local Divider = MainTab:CreateDivider()
-
-local Toggle = MainTab:CreateToggle({
-   Name = "Infinite Jump",
-   CurrentValue = false,
-   Flag = "Toggle1",
-   Callback = function(Value)
-        Rayfield:Notify({
-   Title = "Succesly change value",
-   Content = "Succesly change inf jump",
-   Duration = 5,
-   Image = nil,
-})
-_G.infinjump = not _G.infinjump
-
-if _G.infinJumpStarted == nil then
-	_G.infinJumpStarted = true
-
-	local plr = game:GetService('Players').LocalPlayer
-	local m = plr:GetMouse()
-	m.KeyDown:connect(function(k)
-		if _G.infinjump then
-			if k:byte() == 32 then
-			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
-			humanoid:ChangeState('Jumping')
-			wait()
-			humanoid:ChangeState('Seated')
-			end
-		end
-	end)
-end
-   end,
-})
-
-local Toggle = MainTab:CreateToggle({
-   Name = "Noclip (50% PATCHED)",
-   CurrentValue = false,
-   Flag = "Toggle2",
-   Callback = function(Value)
-        Rayfield:Notify({
-   Title = "Succesly change value",
-   Content = "Succesly change noclip",
-   Duration = 5,
-   Image = nil,
-})
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-spawn(function()
-    while true do
-        if Value == true then
-            for _, part in pairs(character:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                end
-            end
-        else
-            for _, part in pairs(character:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = true
-                end
-            end
-        end
-        wait(0.1)
-    end
-end)
-
-   end,
-})
-
------------------------------------------
--- local SeedList = {"Cactus Seed", "Strawberry Seed", "Pumpkin Seed", "Sunflower Seed", "Dragon Fruit Seed", "Eggplant Seed", "Watermelon Seed", "Grape Seed", "Cocotank Seed", "Carnivorous Plant Seed", "Mr Carrot Seed", "Tomatrio Seed", "Shroombino Seed", "Mango Seed", "King Lemon Seed"}
--- local GearList = {"Water Bucket", "Frost Grenade", "Banana Gun", "Frost Blower", "Carrot Launcher"}
------------------------------------------
-
-local AutoTab = Window:CreateTab("🔁 Automation", nil)
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local AutoBuyEnabled = false
@@ -174,51 +58,7 @@ local function ensureTable(value)
 	end
 end
 
-local SeedDropdown = AutoTab:CreateDropdown({
-	Name = "Select Seeds",
-	Options = {
-    "Cactus Seed", 
-    "Strawberry Seed", 
-    "Pumpkin Seed", 
-    "Sunflower Seed", 
-    "Dragon Fruit Seed", 
-    "Eggplant Seed", 
-    "Watermelon Seed", 
-    "Grape Seed", 
-    "Cocotank Seed", 
-    "Carnivorous Plant Seed", 
-    "Mr Carrot Seed", 
-    "Tomatrio Seed", 
-    "Shroombino Seed", 
-    "Mango Seed", 
-    "King Lemon Seed"},
-	CurrentOption = {},
-	MultipleOptions = true,
-	Flag = "SeedSelection",
-	Callback = function(Options)
-		SelectedSeeds = ensureTable(Options)
-	end,
-})
-
-local GearDropdown = AutoTab:CreateDropdown({
-	Name = "Select Gears",
-	Options = {
-    "Water Bucket", 
-    --"Frost Grenade", 
-    --"Banana Gun", 
-    --"Frost Blower", 
-    --"Carrot Launcher"},
-	CurrentOption = {},
-	MultipleOptions = true,
-	Flag = "GearSelection",
-	Callback = function(Options)
-		SelectedGears = ensureTable(Options)
-	end,
-})
-
-local Divider = AutoTab:CreateDivider()
-
-AutoTab:CreateToggle({
+MainTab:CreateToggle({
 	Name = "Auto Buy Enabled",
 	CurrentValue = false,
 	Flag = "AutoBuyEnabled",
@@ -232,6 +72,52 @@ AutoTab:CreateToggle({
 })
 	end,
 })
+
+local SeedDropdown = MainTab:CreateDropdown({
+	Name = "Select Seeds",
+	Options = {
+    --"Cactus Seed", 
+    --"Strawberry Seed", 
+    --"Pumpkin Seed", 
+    --"Sunflower Seed", 
+    --"Dragon Fruit Seed", 
+    --"Eggplant Seed", 
+    --"Watermelon Seed", 
+    --"Grape Seed", 
+    --"Cocotank Seed", 
+    "Carnivorous Plant Seed", 
+    "Mr Carrot Seed", 
+    "Tomatrio Seed", 
+    "Shroombino Seed", 
+    "Mango Seed", 
+    "King Limone Seed"},
+	CurrentOption = {},
+	MultipleOptions = true,
+	Flag = "SeedSelection",
+	Callback = function(Options)
+		SelectedSeeds = ensureTable(Options)
+	end,
+})
+
+local GearDropdown = MainTab:CreateDropdown({
+	Name = "Select Gears",
+	Options = {
+    "Water Bucket", 
+    --"Frost Grenade", 
+    --"Banana Gun", 
+    --"Frost Blower", 
+    --"Carrot Launcher"
+        },
+	CurrentOption = {},
+	MultipleOptions = true,
+	Flag = "GearSelection",
+	Callback = function(Options)
+		SelectedGears = ensureTable(Options)
+	end,
+})
+
+local Divider = MainTab:CreateDivider()
+
 
 task.spawn(function()
 	while true do
@@ -253,26 +139,3 @@ task.spawn(function()
 		task.wait(0.2)
 	end
 end)
-
-local InfoTab = Window:CreateTab("📣 Information", nil)
-
-local Label = InfoTab:CreateLabel("👤 Script made by MizuDEV", nil, Color3.fromRGB(255, 255, 255), false)
-local Label = InfoTab:CreateLabel("📝 Version 0.0.1v.", nil, Color3.fromRGB(255, 255, 255), false)
-
-local Divider = InfoTab:CreateDivider()
-
-local Button = InfoTab:CreateButton({
-   Name = "Join to discord !",
-	Callback = function()
-		setclipboard("dc.gg/mandarynkahub")
-		Rayfield:Notify({
-			Title = "Discord Link Copied",
-			Content = "Paste this link to your browser (Ctrl + V).",
-			Duration = 5
-		})
-	end,
-})
-
-local Divider = InfoTab:CreateDivider()
-
-local Label = InfoTab:CreateLabel("❓ Whats next: AutoFarm(hit brainrot), dupe, ", nil, Color3.fromRGB(255, 255, 255), false)
