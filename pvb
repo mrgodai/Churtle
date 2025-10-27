@@ -126,14 +126,14 @@ task.spawn(function()
 				pcall(function()
 					ReplicatedStorage.Remotes.BuyItem:FireServer(seed)
 				end)
-				task.wait(0.1)
+				task.wait(0.05)
 			end
 
 			for _, gear in ipairs(SelectedGears) do
 				pcall(function()
 					ReplicatedStorage.Remotes.BuyGear:FireServer(gear)
 				end)
-				task.wait(0.1)
+				task.wait(0.05)
 			end
 		end
 		task.wait(0.05)
