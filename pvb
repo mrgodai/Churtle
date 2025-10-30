@@ -13,8 +13,8 @@ local Window = Rayfield:CreateWindow({
 
    ToggleUIKeybind = "G", 
 
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false,
+   DisableRayfieldPrompts = true,
+   DisableBuildWarnings = true,
 
    ConfigurationSaving = {
       Enabled = true,
@@ -45,8 +45,23 @@ local MainTab = Window:CreateTab("🏠 Main", nil)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local AutoBuyEnabled = false
-local SelectedSeeds = {}
-local SelectedGears = {}
+local SelectedSeeds = {
+    --"Cactus Seed", 
+    --"Strawberry Seed", 
+    --"Pumpkin Seed", 
+    --"Sunflower Seed", 
+    --"Dragon Fruit Seed", 
+    --"Eggplant Seed", 
+    --"Watermelon Seed", 
+    --"Grape Seed", 
+    --"Cocotank Seed", 
+    "Carnivorous Plant Seed", 
+    "Mr Carrot Seed", 
+    "Tomatrio Seed", 
+    "Shroombino Seed", 
+    "Mango Seed", 
+    "King Limone Seed"}
+local SelectedGears = {"Water Bucket"}
 
 local function ensureTable(value)
 	if typeof(value) == "table" then
@@ -70,49 +85,6 @@ MainTab:CreateToggle({
    Duration = 5,
    Image = nil,
 })
-	end,
-})
-
-local SeedDropdown = MainTab:CreateDropdown({
-	Name = "Select Seeds",
-	Options = {
-    --"Cactus Seed", 
-    --"Strawberry Seed", 
-    --"Pumpkin Seed", 
-    --"Sunflower Seed", 
-    --"Dragon Fruit Seed", 
-    --"Eggplant Seed", 
-    --"Watermelon Seed", 
-    --"Grape Seed", 
-    --"Cocotank Seed", 
-    "Carnivorous Plant Seed", 
-    "Mr Carrot Seed", 
-    "Tomatrio Seed", 
-    "Shroombino Seed", 
-    "Mango Seed", 
-    "King Limone Seed"},
-	CurrentOption = {},
-	MultipleOptions = true,
-	Flag = "SeedSelection",
-	Callback = function(Options)
-		SelectedSeeds = ensureTable(Options)
-	end,
-})
-
-local GearDropdown = MainTab:CreateDropdown({
-	Name = "Select Gears",
-	Options = {
-    "Water Bucket", 
-    --"Frost Grenade", 
-    --"Banana Gun", 
-    --"Frost Blower", 
-    --"Carrot Launcher"
-        },
-	CurrentOption = {},
-	MultipleOptions = true,
-	Flag = "GearSelection",
-	Callback = function(Options)
-		SelectedGears = ensureTable(Options)
 	end,
 })
 
