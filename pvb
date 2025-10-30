@@ -47,9 +47,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local AutoBuyEnabled = false
 local SelectedSeeds = {
     --"Cactus Seed", 
-    --"Strawberry Seed", 
-    --"Pumpkin Seed", 
-    --"Sunflower Seed", 
+    "Strawberry Seed", 
+    "Pumpkin Seed", 
+    "Sunflower Seed", 
     --"Dragon Fruit Seed", 
     --"Eggplant Seed", 
     --"Watermelon Seed", 
