@@ -55,12 +55,14 @@ local SelectedSeeds = {
     --"Watermelon Seed", 
     --"Grape Seed", 
     --"Cocotank Seed", 
-    "Carnivorous Plant Seed", 
+    --"Carnivorous Plant Seed", 
     "Mr Carrot Seed", 
     "Tomatrio Seed", 
     "Shroombino Seed", 
     "Mango Seed", 
-    "King Limone Seed"}
+    "King Limone Seed".
+	"Starfruit Seed"
+	}
 local SelectedGears = {"Water Bucket"}
 
 local function ensureTable(value)
