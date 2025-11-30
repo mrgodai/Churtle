@@ -61,7 +61,7 @@ local SelectedSeeds = {
     "Mango Seed", 
     "King Limone Seed",
     "Starfruit Seed",
-	"Brussel Sprouts Seed"
+    "Brussel Sprouts Seed"
 	}
 local SelectedGears = {"Water Bucket"}
 
