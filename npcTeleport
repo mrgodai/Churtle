@@ -1,0 +1,116 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local STUCK_TIME = 10
+local CHECK_INTERVAL = 0.5
+local TELEPORT_OFFSET = Vector3.new(0, 3, 0)
+
+local currentTarget = nil
+local lastPosition = nil
+local lastMoveTime = tick()
+local visited = {}
+
+local function getCharacter()
+    return LocalPlayer.Character
+end
+
+local function getRoot(model)
+    return model:FindFirstChild("HumanoidRootPart")
+end
+
+local function isValidTarget(model)
+    if not model or not model:IsA("Model") then
+        return false
+    end
+
+    local humanoid = model:FindFirstChildOfClass("Humanoid")
+    local root = getRoot(model)
+
+    if not humanoid or not root then
+        return false
+    end
+
+    if humanoid.Health <= 0 then
+        return false
+    end
+
+    -- Skip player characters
+    if Players:GetPlayerFromCharacter(model) then
+        return false
+    end
+
+    return true
+end
+
+local function findClosestTarget()
+    local character = getCharacter()
+    local myRoot = character and getRoot(character)
+
+    if not myRoot then
+        return nil
+    end
+
+    local closest = nil
+    local closestDistance = math.huge
+
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("Model") and isValidTarget(obj) and not visited[obj] then
+            local root = getRoot(obj)
+            local distance = (root.Position - myRoot.Position).Magnitude
+
+            if distance < closestDistance then
+                closestDistance = distance
+                closest = obj
+            end
+        end
+    end
+
+    return closest
+end
+
+local function teleportToTarget(target)
+    local character = getCharacter()
+    local myRoot = character and getRoot(character)
+    local targetRoot = target and getRoot(target)
+
+    if myRoot and targetRoot then
+        character:PivotTo(
+            targetRoot.CFrame + TELEPORT_OFFSET
+        )
+    end
+end
+
+while true do
+    task.wait(CHECK_INTERVAL)
+
+    if not currentTarget or not isValidTarget(currentTarget) then
+        if currentTarget then
+            visited[currentTarget] = true
+        end
+
+        currentTarget = findClosestTarget()
+        lastPosition = nil
+        lastMoveTime = tick()
+
+        if currentTarget then
+            teleportToTarget(currentTarget)
+        end
+    end
+
+    if currentTarget then
+        local root = getRoot(currentTarget)
+
+        if root then
+            local position = root.Position
+
+            if not lastPosition or (position - lastPosition).Magnitude > 0.1 then
+                lastPosition = position
+                lastMoveTime = tick()
+            elseif tick() - lastMoveTime >= STUCK_TIME then
+                -- Target has not moved for 10 seconds
+                visited[currentTarget] = true
+                currentTarget = nil
+            end
+        end
+    end
+end
