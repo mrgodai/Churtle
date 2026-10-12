@@ -1,61 +1,152 @@
+-- Services
 local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+local Workspace = game:GetService("Workspace")
+local UserInputService = game:GetService("UserInputService")
 
-local STUCK_TIME = 10
-local CHECK_INTERVAL = 0.5
-local TELEPORT_WAIT = 1
-local TELEPORT_OFFSET = Vector3.new(0, 3, 0)
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
-local currentTarget = nil
-local lastPosition = nil
-local lastMoveTime = tick()
-local visited = {}
-local knownObjects = {}
+-- 1. Create UI: Movable Button
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TeleportButtonGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
 
-local function getRoot(model)
-    return model:FindFirstChild("HumanoidRootPart")
-end
+local button = Instance.new("TextButton")
+button.Name = "TeleportButton"
+button.Size = UDim2.new(0, 140, 0, 50)
+button.Position = UDim2.new(0.05, 0, 0.1, 0)
+button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.TextSize = 15
+button.Font = Enum.Font.SourceSansBold
+button.Text = "Teleport to NPC"
+button.Parent = screenGui
 
-local function isPlayerCharacter(model)
-    return Players:GetPlayerFromCharacter(model) ~= nil
-end
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 8)
+uiCorner.Parent = button
 
-local function isValidHumanoid(model)
-    if not model or not model:IsA("Model") then
-        return false
-    end
+-- Make the button draggable (supports both mouse and touch)
+local dragging = false
+local dragInput, mousePos, framePos
 
-    local humanoid = model:FindFirstChildOfClass("Humanoid")
-    local root = getRoot(model)
+button.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		mousePos = input.Position
+		framePos = button.Position
+		
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
 
-    return humanoid ~= nil
-        and root ~= nil
-        and humanoid.Health > 0
-        and not isPlayerCharacter(model)
-end
+button.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
 
-local function getPosition(obj)
-    if obj:IsA("Model") then
-        local root = obj:FindFirstChild("HumanoidRootPart")
-            or obj.PrimaryPart
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		local delta = input.Position - mousePos
+		button.Position = UDim2.new(
+			framePos.X.Scale,
+			framePos.X.Offset + delta.X,
+			framePos.Y.Scale,
+			framePos.Y.Offset + delta.Y
+		)
+	end
+end)
 
-        if root then
-            return root.Position
-        end
-    elseif obj:IsA("BasePart") then
-        return obj.Position
-    end
+-- 2. Entity Tracking & Ignore List Logic
+local ignoreList = {}      -- [model] = true
+local entityTracking = {}  -- [model] = { lastPos = Vector3, lastMoveTime = number }
 
-    return nil
-end
+-- Background loop to track movement, health, and player status (runs every 0.5s for performance)
+task.spawn(function()
+	while true do
+		for _, descendant in ipairs(Workspace:GetDescendants()) do
+			if descendant:IsA("Model") and not ignoreList[descendant] then
+				local humanoid = descendant:FindFirstChildOfClass("Humanoid")
+				if humanoid then
+					-- Check if it's a player
+					local isPlayer = Players:GetPlayerFromCharacter(descendant) ~= nil
+					
+					if isPlayer then
+						ignoreList[descendant] = true
+					else
+						-- Check if dead
+						if humanoid.Health <= 0 then
+							ignoreList[descendant] = true
+						else
+							local hrp = descendant:FindFirstChild("HumanoidRootPart") or descendant.PrimaryPart
+							if hrp then
+								local currentPos = hrp.Position
+								local data = entityTracking[descendant]
+								
+								if not data then
+									entityTracking[descendant] = {
+										lastPos = currentPos,
+										lastMoveTime = tick()
+									}
+								else
+									-- Check if the entity has moved significantly (> 0.5 studs)
+									local distanceMoved = (currentPos - data.lastPos).Magnitude
+									if distanceMoved > 0.5 then
+										data.lastPos = currentPos
+										data.lastMoveTime = tick()
+									else
+										-- If stationary for 5 seconds or more, add to ignore list
+										if tick() - data.lastMoveTime >= 5 then
+											ignoreList[descendant] = true
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		task.wait(0.5)
+	end
+end)
 
-local function teleportTo(obj)
-    local character = LocalPlayer.Character
-    local position = obj and getPosition(obj)
+-- 3. Teleport Function on Button Click
+button.MouseButton1Click:Connect(function()
+	local char = player.Character
+	if not char then return end
+	local myRoot = char:FindFirstChild("HumanoidRootPart")
+	if not myRoot then return end
 
-    if not character or not position then
-        return false
-    end
+	local closestEntityRoot = nil
+	local shortestDistance = math.huge
 
-    character:PivotTo(CFrame.new(position + TELEPORT_OFFSET))
-    task.wait(
+	-- Iterate through tracked entities to find the closest valid one
+	for model, _ in pairs(entityTracking) do
+		if not ignoreList[model] then
+			local humanoid = model:FindFirstChildOfClass("Humanoid")
+			local hrp = model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart
+			
+			if humanoid and humanoid.Health > 0 and hrp then
+				local dist = (myRoot.Position - hrp.Position).Magnitude
+				if dist < shortestDistance then
+					shortestDistance = dist
+					closestEntityRoot = hrp
+				end
+			end
+		end
+	end
+
+	if closestEntityRoot then
+		-- Teleport slightly above the entity to avoid getting stuck inside them
+		myRoot.CFrame = closestEntityRoot.CFrame + Vector3.new(0, 3, 0)
+	else
+		print("No active non-player entities found!")
+	end
+end)
