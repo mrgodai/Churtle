@@ -1,170 +1,43 @@
 -- Services
 local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
-local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- 1. Create UI: Movable Screen Button
+-- 1. Create UI: Position Display Label
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "TeleportButtonGui"
+screenGui.Name = "PositionDisplayGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
-local button = Instance.new("TextButton")
-button.Name = "TeleportButton"
-button.Size = UDim2.new(0, 150, 0, 50)
-button.Position = UDim2.new(0.05, 0, 0.1, 0)
-button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.TextSize = 15
-button.Font = Enum.Font.SourceSansBold
-button.Text = "Teleport to Entity"
-button.Parent = screenGui
+local textLabel = Instance.new("TextLabel")
+textLabel.Name = "PositionLabel"
+textLabel.Size = UDim2.new(0, 230, 0, 36)
+textLabel.Position = UDim2.new(0.01, 0, 0.01, 0) -- Placed near the top-left corner
+textLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+textLabel.BackgroundTransparency = 0.4
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+textLabel.TextSize = 14
+textLabel.Font = Enum.Font.Code
+textLabel.Text = "Position: Finding..."
+textLabel.Parent = screenGui
 
 local uiCorner = Instance.new("UICorner")
-uiCorner.CornerRadius = UDim.new(0, 8)
-uiCorner.Parent = button
+uiCorner.CornerRadius = UDim.new(0, 6)
+uiCorner.Parent = textLabel
 
--- Dragging Mechanics (Mouse & Touch)
-local dragging = false
-local dragInput, mousePos, framePos
-
-button.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		mousePos = input.Position
-		framePos = button.Position
-		
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
-end)
-
-button.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-		dragInput = input
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		local delta = input.Position - mousePos
-		button.Position = UDim2.new(
-			framePos.X.Scale,
-			framePos.X.Offset + delta.X,
-			framePos.Y.Scale,
-			framePos.Y.Offset + delta.Y
-		)
-	end
-end)
-
--- 2. Entity Tracking & Ignore List Logic
-local ignoreList = {}      -- [model] = true
-local entityTracking = {}  -- [model] = { lastPos = Vector3, lastMoveTime = number }
-
--- Helper function to validate non-player entities (Humanoid & Non-Humanoid Rigs)
-local function isValidEntity(model)
-	if ignoreList[model] then return false end
-	if Players:GetPlayerFromCharacter(model) then return false end
-
-	local humanoid = model:FindFirstChildOfClass("Humanoid")
-	local animController = model:FindFirstChildOfClass("AnimationController")
-
-	-- Humanoid Check
-	if humanoid then
-		if humanoid.Health <= 0 then return false end
-		return true
-	end
-
-	-- Non-Humanoid Rig Check (AnimationController or Custom Health Attributes)
-	if animController then
-		local healthAttr = model:GetAttribute("Health") or model:GetAttribute("HP")
-		if healthAttr and healthAttr <= 0 then return false end
-		return true
-	end
-
-	return false
-end
-
--- Background Task: Tracks movement & adds dead or stationary models to the ignore list
-task.spawn(function()
-	while true do
-		for _, descendant in ipairs(Workspace:GetDescendants()) do
-			if descendant:IsA("Model") and not ignoreList[descendant] then
-				if Players:GetPlayerFromCharacter(descendant) then
-					ignoreList[descendant] = true
-				elseif isValidEntity(descendant) then
-					local rootPart = descendant:FindFirstChild("HumanoidRootPart") 
-						or descendant.PrimaryPart 
-						or descendant:FindFirstChildWhichIsA("BasePart")
-
-					if rootPart then
-						local currentPos = rootPart.Position
-						local data = entityTracking[descendant]
-
-						if not data then
-							entityTracking[descendant] = {
-								lastPos = currentPos,
-								lastMoveTime = tick()
-							}
-						else
-							-- Check if the entity moved more than 0.5 studs
-							local distanceMoved = (currentPos - data.lastPos).Magnitude
-							if distanceMoved > 0.5 then
-								data.lastPos = currentPos
-								data.lastMoveTime = tick()
-							else
-								-- Add to ignore list if stagnant for 5 or more seconds
-								if tick() - data.lastMoveTime >= 5 then
-									ignoreList[descendant] = true
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-		task.wait(0.5)
-	end
-end)
-
--- 3. Button Click: Teleport Player Character to Closest Entity
-button.MouseButton1Click:Connect(function()
+-- 2. Real-time Update Loop (Runs every frame for smooth tracking)
+RunService.RenderStepped:Connect(function()
 	local char = player.Character
-	if not char then return end
-	local myRoot = char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart
-	if not myRoot then return end
-
-	local closestEntityRoot = nil
-	local shortestDistance = math.huge
-
-	-- Search tracked entities for the closest valid target
-	for model, _ in pairs(entityTracking) do
-		if not ignoreList[model] and isValidEntity(model) then
-			local targetRoot = model:FindFirstChild("HumanoidRootPart") 
-				or model.PrimaryPart 
-				or model:FindFirstChildWhichIsA("BasePart")
-
-			if targetRoot then
-				local dist = (myRoot.Position - targetRoot.Position).Magnitude
-				if dist < shortestDistance then
-					shortestDistance = dist
-					closestEntityRoot = targetRoot
-				end
-			end
+	if char then
+		local rootPart = char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart
+		if rootPart then
+			local pos = rootPart.Position
+			-- Format coordinates rounded to 1 decimal place
+			textLabel.Text = string.format("X: %.1f | Y: %.1f | Z: %.1f", pos.X, pos.Y, pos.Z)
+			return
 		end
 	end
-
-	-- Teleport character to target location
-	if closestEntityRoot then
-		-- Offsets teleport 3 studs vertically so player doesn't spawn inside the model
-		myRoot.CFrame = closestEntityRoot.CFrame + Vector3.new(0, 3, 0)
-	else
-		print("No active moving entities found!")
-	end
+	textLabel.Text = "Position: Character not found"
 end)
