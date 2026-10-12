@@ -6,7 +6,7 @@ local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- 1. Create UI: Movable Button
+-- 1. Create UI: Movable Screen Button
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TeleportButtonGui"
 screenGui.ResetOnSpawn = false
@@ -14,20 +14,20 @@ screenGui.Parent = playerGui
 
 local button = Instance.new("TextButton")
 button.Name = "TeleportButton"
-button.Size = UDim2.new(0, 140, 0, 50)
+button.Size = UDim2.new(0, 150, 0, 50)
 button.Position = UDim2.new(0.05, 0, 0.1, 0)
 button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 button.TextColor3 = Color3.fromRGB(255, 255, 255)
 button.TextSize = 15
 button.Font = Enum.Font.SourceSansBold
-button.Text = "Teleport to NPC"
+button.Text = "Teleport to Entity"
 button.Parent = screenGui
 
 local uiCorner = Instance.new("UICorner")
 uiCorner.CornerRadius = UDim.new(0, 8)
 uiCorner.Parent = button
 
--- Make the button draggable (supports both mouse and touch)
+-- Dragging Mechanics (Mouse & Touch)
 local dragging = false
 local dragInput, mousePos, framePos
 
@@ -67,45 +67,61 @@ end)
 local ignoreList = {}      -- [model] = true
 local entityTracking = {}  -- [model] = { lastPos = Vector3, lastMoveTime = number }
 
--- Background loop to track movement, health, and player status (runs every 0.5s for performance)
+-- Helper function to validate non-player entities (Humanoid & Non-Humanoid Rigs)
+local function isValidEntity(model)
+	if ignoreList[model] then return false end
+	if Players:GetPlayerFromCharacter(model) then return false end
+
+	local humanoid = model:FindFirstChildOfClass("Humanoid")
+	local animController = model:FindFirstChildOfClass("AnimationController")
+
+	-- Humanoid Check
+	if humanoid then
+		if humanoid.Health <= 0 then return false end
+		return true
+	end
+
+	-- Non-Humanoid Rig Check (AnimationController or Custom Health Attributes)
+	if animController then
+		local healthAttr = model:GetAttribute("Health") or model:GetAttribute("HP")
+		if healthAttr and healthAttr <= 0 then return false end
+		return true
+	end
+
+	return false
+end
+
+-- Background Task: Tracks movement & adds dead or stationary models to the ignore list
 task.spawn(function()
 	while true do
 		for _, descendant in ipairs(Workspace:GetDescendants()) do
 			if descendant:IsA("Model") and not ignoreList[descendant] then
-				local humanoid = descendant:FindFirstChildOfClass("Humanoid")
-				if humanoid then
-					-- Check if it's a player
-					local isPlayer = Players:GetPlayerFromCharacter(descendant) ~= nil
-					
-					if isPlayer then
-						ignoreList[descendant] = true
-					else
-						-- Check if dead
-						if humanoid.Health <= 0 then
-							ignoreList[descendant] = true
+				if Players:GetPlayerFromCharacter(descendant) then
+					ignoreList[descendant] = true
+				elseif isValidEntity(descendant) then
+					local rootPart = descendant:FindFirstChild("HumanoidRootPart") 
+						or descendant.PrimaryPart 
+						or descendant:FindFirstChildWhichIsA("BasePart")
+
+					if rootPart then
+						local currentPos = rootPart.Position
+						local data = entityTracking[descendant]
+
+						if not data then
+							entityTracking[descendant] = {
+								lastPos = currentPos,
+								lastMoveTime = tick()
+							}
 						else
-							local hrp = descendant:FindFirstChild("HumanoidRootPart") or descendant.PrimaryPart
-							if hrp then
-								local currentPos = hrp.Position
-								local data = entityTracking[descendant]
-								
-								if not data then
-									entityTracking[descendant] = {
-										lastPos = currentPos,
-										lastMoveTime = tick()
-									}
-								else
-									-- Check if the entity has moved significantly (> 0.5 studs)
-									local distanceMoved = (currentPos - data.lastPos).Magnitude
-									if distanceMoved > 0.5 then
-										data.lastPos = currentPos
-										data.lastMoveTime = tick()
-									else
-										-- If stationary for 5 seconds or more, add to ignore list
-										if tick() - data.lastMoveTime >= 5 then
-											ignoreList[descendant] = true
-										end
-									end
+							-- Check if the entity moved more than 0.5 studs
+							local distanceMoved = (currentPos - data.lastPos).Magnitude
+							if distanceMoved > 0.5 then
+								data.lastPos = currentPos
+								data.lastMoveTime = tick()
+							else
+								-- Add to ignore list if stagnant for 5 or more seconds
+								if tick() - data.lastMoveTime >= 5 then
+									ignoreList[descendant] = true
 								end
 							end
 						end
@@ -117,36 +133,38 @@ task.spawn(function()
 	end
 end)
 
--- 3. Teleport Function on Button Click
+-- 3. Button Click: Teleport Player Character to Closest Entity
 button.MouseButton1Click:Connect(function()
 	local char = player.Character
 	if not char then return end
-	local myRoot = char:FindFirstChild("HumanoidRootPart")
+	local myRoot = char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart
 	if not myRoot then return end
 
 	local closestEntityRoot = nil
 	local shortestDistance = math.huge
 
-	-- Iterate through tracked entities to find the closest valid one
+	-- Search tracked entities for the closest valid target
 	for model, _ in pairs(entityTracking) do
-		if not ignoreList[model] then
-			local humanoid = model:FindFirstChildOfClass("Humanoid")
-			local hrp = model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart
-			
-			if humanoid and humanoid.Health > 0 and hrp then
-				local dist = (myRoot.Position - hrp.Position).Magnitude
+		if not ignoreList[model] and isValidEntity(model) then
+			local targetRoot = model:FindFirstChild("HumanoidRootPart") 
+				or model.PrimaryPart 
+				or model:FindFirstChildWhichIsA("BasePart")
+
+			if targetRoot then
+				local dist = (myRoot.Position - targetRoot.Position).Magnitude
 				if dist < shortestDistance then
 					shortestDistance = dist
-					closestEntityRoot = hrp
+					closestEntityRoot = targetRoot
 				end
 			end
 		end
 	end
 
+	-- Teleport character to target location
 	if closestEntityRoot then
-		-- Teleport slightly above the entity to avoid getting stuck inside them
+		-- Offsets teleport 3 studs vertically so player doesn't spawn inside the model
 		myRoot.CFrame = closestEntityRoot.CFrame + Vector3.new(0, 3, 0)
 	else
-		print("No active non-player entities found!")
+		print("No active moving entities found!")
 	end
 end)
